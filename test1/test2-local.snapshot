@@ -1,0 +1,312 @@
+{
+  "header" : {
+    "dataModelVersion" : "2"
+  },
+  "content" : {
+    "comments" : "",
+    "componentType" : "PROCESS_GROUP",
+    "connections" : [ {
+      "backPressureDataSizeThreshold" : "1 GB",
+      "backPressureObjectThreshold" : 10000,
+      "bends" : [ ],
+      "componentType" : "CONNECTION",
+      "destination" : {
+        "comments" : "",
+        "groupId" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+        "id" : "11c42b4d-80da-332a-adfd-4d7443a43a06",
+        "name" : "PutFile",
+        "type" : "PROCESSOR"
+      },
+      "flowFileExpiration" : "0 sec",
+      "groupIdentifier" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+      "identifier" : "bcef6583-6572-3d48-a203-333f1793c933",
+      "labelIndex" : 1,
+      "loadBalanceCompression" : "DO_NOT_COMPRESS",
+      "loadBalanceStrategy" : "DO_NOT_LOAD_BALANCE",
+      "name" : "",
+      "partitioningAttribute" : "",
+      "prioritizers" : [ ],
+      "selectedRelationships" : [ "success" ],
+      "source" : {
+        "comments" : "",
+        "groupId" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+        "id" : "a0c1db91-ad43-355f-9bc3-33e215811298",
+        "name" : "log-injector GetHTTP",
+        "type" : "PROCESSOR"
+      },
+      "zIndex" : 0
+    } ],
+    "controllerServices" : [ ],
+    "funnels" : [ ],
+    "identifier" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+    "inputPorts" : [ ],
+    "labels" : [ ],
+    "name" : "test",
+    "outputPorts" : [ ],
+    "position" : {
+      "x" : -137.7369559988063,
+      "y" : 304.496847032293
+    },
+    "processGroups" : [ ],
+    "processors" : [ {
+      "autoTerminatedRelationships" : [ "success", "failure" ],
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-scripting-nar",
+        "group" : "org.apache.nifi",
+        "version" : "1.9.2"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+      "identifier" : "be295c59-4ccf-319f-820d-7f517bd1dacb",
+      "name" : "ExecuteScript",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -23.039145907235024,
+        "y" : 270.94319301184504
+      },
+      "properties" : {
+        "Script Engine" : "python",
+        "Script Body" : "import os\nimport subprocess\n\n## Changeable Variable\nPART_HOUR = '20190427'\nSKIP_HIVE= 'true'\nSKIP_DRUID = ''\n####\n\nVERSION='develop'\nPROFILE='--spring.profiles.active=dev'\nDATA_SOURCE_INFO='--spring.datasource.url=jdbc:hive2://172.29.64.231:20100/ad_platform --spring.datasource.username=PS08953 --spring.datasource.password=Pe261512'\nJOB_NAME='--log-injector.job-name=med-response-daily'\n\nos.system('rm -f log-injector-*.jar')\nsubprocess.call([\"wget\", \"-nc\", \"-nv\", \"http://nexus.11stcorp.com:8081/nexus/repository/releases/adPlatform/log-injector/%s/log-injector-%s.jar\"%(VERSION,VERSION)])\n\nif PART_HOUR != '' :\n    PART_HOUR_OPTION=\"--part-hour=%s\"%PART_HOUR\nif SKIP_HIVE == 'true' :\n    SKIP_SOURCE_OPTION=\"--skip-source=%s\"%SKIP_HIVE\nelse :\n    SKIP_SOURCE_OPTION=\"\"\nif SKIP_DRUID == 'true' :\n    SKIP_SINK_OPTION=\"--skip-sink=%s\"%SKIP_DRUID\nelse :\n    SKIP_SINK_OPTION=\"\"\n\nresult = os.system('/app/jdk/bin/java -jar log-injector-%s.jar %s %s %s %s %s %s'%(VERSION,PROFILE,JOB_NAME,PART_HOUR_OPTION,SKIP_SOURCE_OPTION,SKIP_SINK_OPTION,DATA_SOURCE_INFO))\n"
+      },
+      "propertyDescriptors" : {
+        "Script File" : {
+          "displayName" : "Script File",
+          "identifiesControllerService" : false,
+          "name" : "Script File",
+          "sensitive" : false
+        },
+        "Script Engine" : {
+          "displayName" : "Script Engine",
+          "identifiesControllerService" : false,
+          "name" : "Script Engine",
+          "sensitive" : false
+        },
+        "Script Body" : {
+          "displayName" : "Script Body",
+          "identifiesControllerService" : false,
+          "name" : "Script Body",
+          "sensitive" : false
+        },
+        "Module Directory" : {
+          "displayName" : "Module Directory",
+          "identifiesControllerService" : false,
+          "name" : "Module Directory",
+          "sensitive" : false
+        }
+      },
+      "runDurationMillis" : 0,
+      "schedulingPeriod" : "60 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.script.ExecuteScript",
+      "yieldDuration" : "1 sec"
+    }, {
+      "autoTerminatedRelationships" : [ "success", "failure" ],
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-standard-nar",
+        "group" : "org.apache.nifi",
+        "version" : "1.9.2"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+      "identifier" : "11c42b4d-80da-332a-adfd-4d7443a43a06",
+      "name" : "PutFile",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -442.4806324488868,
+        "y" : 524.1869011108461
+      },
+      "properties" : {
+        "Create Missing Directories" : "true",
+        "Directory" : "/app/puser/shell",
+        "Conflict Resolution Strategy" : "fail"
+      },
+      "propertyDescriptors" : {
+        "Group" : {
+          "displayName" : "Group",
+          "identifiesControllerService" : false,
+          "name" : "Group",
+          "sensitive" : false
+        },
+        "Owner" : {
+          "displayName" : "Owner",
+          "identifiesControllerService" : false,
+          "name" : "Owner",
+          "sensitive" : false
+        },
+        "Create Missing Directories" : {
+          "displayName" : "Create Missing Directories",
+          "identifiesControllerService" : false,
+          "name" : "Create Missing Directories",
+          "sensitive" : false
+        },
+        "Permissions" : {
+          "displayName" : "Permissions",
+          "identifiesControllerService" : false,
+          "name" : "Permissions",
+          "sensitive" : false
+        },
+        "Maximum File Count" : {
+          "displayName" : "Maximum File Count",
+          "identifiesControllerService" : false,
+          "name" : "Maximum File Count",
+          "sensitive" : false
+        },
+        "Last Modified Time" : {
+          "displayName" : "Last Modified Time",
+          "identifiesControllerService" : false,
+          "name" : "Last Modified Time",
+          "sensitive" : false
+        },
+        "Directory" : {
+          "displayName" : "Directory",
+          "identifiesControllerService" : false,
+          "name" : "Directory",
+          "sensitive" : false
+        },
+        "Conflict Resolution Strategy" : {
+          "displayName" : "Conflict Resolution Strategy",
+          "identifiesControllerService" : false,
+          "name" : "Conflict Resolution Strategy",
+          "sensitive" : false
+        }
+      },
+      "runDurationMillis" : 0,
+      "schedulingPeriod" : "60 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.standard.PutFile",
+      "yieldDuration" : "1 sec"
+    }, {
+      "autoTerminatedRelationships" : [ ],
+      "bulletinLevel" : "WARN",
+      "bundle" : {
+        "artifact" : "nifi-standard-nar",
+        "group" : "org.apache.nifi",
+        "version" : "1.9.2"
+      },
+      "comments" : "",
+      "componentType" : "PROCESSOR",
+      "concurrentlySchedulableTaskCount" : 1,
+      "executionNode" : "ALL",
+      "groupIdentifier" : "9b70ca49-8b95-3470-a2f6-5d0af9198367",
+      "identifier" : "a0c1db91-ad43-355f-9bc3-33e215811298",
+      "name" : "log-injector GetHTTP",
+      "penaltyDuration" : "30 sec",
+      "position" : {
+        "x" : -405.73463777092206,
+        "y" : 184.73025662399948
+      },
+      "properties" : {
+        "redirect-cookie-policy" : "default",
+        "Filename" : "log-injector-develop.jar",
+        "URL" : "http://nexus.11stcorp.com:8081/nexus/repository/releases/adPlatform/log-injector/develop/log-injector-develop.jar",
+        "Connection Timeout" : "30 sec",
+        "Data Timeout" : "30 sec",
+        "Follow Redirects" : "false"
+      },
+      "propertyDescriptors" : {
+        "Proxy Host" : {
+          "displayName" : "Proxy Host",
+          "identifiesControllerService" : false,
+          "name" : "Proxy Host",
+          "sensitive" : false
+        },
+        "redirect-cookie-policy" : {
+          "displayName" : "Redirect Cookie Policy",
+          "identifiesControllerService" : false,
+          "name" : "redirect-cookie-policy",
+          "sensitive" : false
+        },
+        "proxy-configuration-service" : {
+          "displayName" : "Proxy Configuration Service",
+          "identifiesControllerService" : true,
+          "name" : "proxy-configuration-service",
+          "sensitive" : false
+        },
+        "Filename" : {
+          "displayName" : "Filename",
+          "identifiesControllerService" : false,
+          "name" : "Filename",
+          "sensitive" : false
+        },
+        "User Agent" : {
+          "displayName" : "User Agent",
+          "identifiesControllerService" : false,
+          "name" : "User Agent",
+          "sensitive" : false
+        },
+        "Proxy Port" : {
+          "displayName" : "Proxy Port",
+          "identifiesControllerService" : false,
+          "name" : "Proxy Port",
+          "sensitive" : false
+        },
+        "URL" : {
+          "displayName" : "URL",
+          "identifiesControllerService" : false,
+          "name" : "URL",
+          "sensitive" : false
+        },
+        "Connection Timeout" : {
+          "displayName" : "Connection Timeout",
+          "identifiesControllerService" : false,
+          "name" : "Connection Timeout",
+          "sensitive" : false
+        },
+        "Data Timeout" : {
+          "displayName" : "Data Timeout",
+          "identifiesControllerService" : false,
+          "name" : "Data Timeout",
+          "sensitive" : false
+        },
+        "SSL Context Service" : {
+          "displayName" : "SSL Context Service",
+          "identifiesControllerService" : true,
+          "name" : "SSL Context Service",
+          "sensitive" : false
+        },
+        "Username" : {
+          "displayName" : "Username",
+          "identifiesControllerService" : false,
+          "name" : "Username",
+          "sensitive" : false
+        },
+        "Accept Content-Type" : {
+          "displayName" : "Accept Content-Type",
+          "identifiesControllerService" : false,
+          "name" : "Accept Content-Type",
+          "sensitive" : false
+        },
+        "Follow Redirects" : {
+          "displayName" : "Follow Redirects",
+          "identifiesControllerService" : false,
+          "name" : "Follow Redirects",
+          "sensitive" : false
+        },
+        "Password" : {
+          "displayName" : "Password",
+          "identifiesControllerService" : false,
+          "name" : "Password",
+          "sensitive" : false
+        }
+      },
+      "runDurationMillis" : 0,
+      "schedulingPeriod" : "60 sec",
+      "schedulingStrategy" : "TIMER_DRIVEN",
+      "style" : { },
+      "type" : "org.apache.nifi.processors.standard.GetHTTP",
+      "yieldDuration" : "1 sec"
+    } ],
+    "remoteProcessGroups" : [ ],
+    "variables" : { }
+  }
+}
